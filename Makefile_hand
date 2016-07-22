@@ -1,0 +1,69 @@
+##############################################################################
+#
+# Polylib - Polygon Management Library
+#
+# Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+# All rights reserved.
+# 
+# Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+# All rights reserved.
+#
+##############################################################################
+#
+#  At first, edit MACRO, then make
+
+#  Target  mpi or single
+TARGET      = mpi
+
+AR          = ar cru
+RANLIB      = ranlib
+RM          = \rm -f
+MPI_DIR	    = /opt/openmpi
+TP_DIR      = /usr/local/TextParser
+NPT_DIR     = /usr/local/Npatchlib
+MPI_OPT     = -DMPI_PL
+REAL_OPT    =
+NPT_OPT     = -DUSE_NPATCH_LIB
+OMP_FLAGS   =
+CXX         = icpc
+CXXFLAGS    = -O3 $(MPI_OPT) $(REAL_OPT) $(NPT_OPT) $(OMP_FLAGS) -Wall -fno-strict-aliasing
+UDEF_INC_PATH = -I$(TP_DIR)/include -I$(NPT_DIR)/include -I$(MPI_DIR)/include
+
+
+########################
+# BG/P
+########################
+
+#AR          = ar crv
+#RANLIB      = ranlib
+#RM          = \rm -f
+#MPI_DIR     = /bgsys/drivers/ppcfloor/comm
+#TP_DIR      = /usr/local/TextParser
+#NPT_DIR      = /usr/local/Npatchlib
+#MPI_OPT     = -DMPI_PL
+#OMP_FLAGS   =
+#CXX         = mpixlcxx_r
+#CXXFLAGS    = -O3 $(MPI_OPT) $(REAL_OPT) $(NPT_OPT) -qarch=450d -qtune=450 $(OMP_FLAGS)
+#UDEF_INC_PATH = -I$(TP_DIR)/include -I$(NPT_DIR)/include -I$(MPI_DIR)/include
+#UDEF_LIB_PATH_SPEC = -L/soft/apps/ibmcmp/xlf/bg/11.1/bglib
+#UDEF_LIBS_SPEC     = -lxlopt -lxl -lxlf90 -lxlfmath
+
+
+
+all:
+	( \
+	cd src; \
+	make $(TAEGET) \
+		CXX='$(CXX)' \
+		CXXFLAGS='$(CXXFLAGS)' \
+		AR='$(AR)' \
+		RANLIB='$(RANLIB)' \
+		RM='$(RM)' \
+		UDEF_INC_PATH='$(UDEF_INC_PATH)' \
+	)
+
+clean:
+	(cd src; make clean)
+
+depend:
+	(cd src; make depend)

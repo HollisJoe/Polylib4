@@ -1,0 +1,45 @@
+##############################################################################
+#
+# Polylib - Polygon Management Library
+#
+# Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+# All rights reserved.
+# 
+# Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+# All rights reserved.
+#
+##############################################################################
+#
+#  At first, edit MACRO, then make
+
+# Target
+TARGET      = npt_to_stl4
+
+# Linker & Linkage Options
+LD=$(CXX)
+
+# Suffixes
+.SUFFIXES: .o .cxx .cpp
+
+#--------------------------------------
+#  Objects
+OBJ  = \
+	main.o
+
+#--------------------------------------
+all: $(TARGET)
+
+
+#--------------------------------------
+$(TARGET): $(OBJ)
+	$(LD) $(LDFLAGS) $(OBJ) -o $(TARGET) $(LIBS)
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE) $<
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE) $<
+
+clean:
+	$(RM) $(OBJ) $(TARGET)
+

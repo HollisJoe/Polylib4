@@ -1,0 +1,55 @@
+/*
+ * Polylib - Polygon Management Library
+ *
+ * Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+ * All rights reserved.
+ * 
+ * Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+ * All rights reserved.
+ *
+ */
+
+このディレクトリには、Polylibの例題プログラムが格納されています。
+    例題：windmill (風車）
+            風向きによる風車全体の回転と
+            風車のブレードの回転の２種類の回転があります。
+
+Polylibライブラリのビルドが終わっていることが前提です。
+  例題プログラムを有効とするためには、configure実行時に 
+  --enable-example=yes を指定してください。
+  例題プログラムソースと同一ディレクトリにある
+  Makefile_hand を使って構築することも可能です。
+
+ここでは、configureにより、ビルドディレクトリ（BUILD_DIR）配下に
+環境を構築したものとして記載しています。
+説明のための表記を以下とします。
+    (POLY_DIR)     Polylibのトップディレクトリ
+    (BUILD_DIR)    Polylibのビルド用ディレクトリ
+
+例題プログラムのディレクトリに移動します。
+
+$cd (BUILD_DIR)/examples/windmill
+
+例題プログラムは、Polylibライブラリのビルド時点で生成されていますが
+次のコマンドで再生成することが出来ます。
+
+$make
+
+入力データを参照できるようにシンボリックリンクを貼ります。
+
+$ln -s (POLY_DIR)/examples/windmill/polylib_config.tp  polylib_config.tp
+$ln -s (POLY_DIR)/examples/windmill/WL3000  WL3000
+
+
+プログラムは以下の様に動かします。
+$mpirun -np 8 ./exampleWindmill 2>&1 | tee log.txt
+
+実行結果は確認用として10step毎に5回出力しています。
+    ・全体のstlファイル
+    ・各ランク毎の分割したSTLファイル（ファイル名にランクNoが付加されています）
+    ・上記を出力した時のtppファイル
+
+次のコマンドで、実行ファイルとオブジェクトファイル,及び実行時に作成したファイルを消去します。
+
+$make clean
+

@@ -1,0 +1,57 @@
+##############################################################################
+#
+# Polylib - Polygon Management Library
+#
+# Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+# All rights reserved.
+# 
+# Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+# All rights reserved.
+#
+##############################################################################
+#
+#  At first, edit MACRO, then make
+
+# Target
+TARGET      = test
+
+# Suffixes
+.SUFFIXES: .o .F90 .F .f90 .f
+
+#--------------------------------------
+#  Objects
+OBJ  = \
+	main.o
+
+#--------------------------------------
+all: $(TARGET)
+
+
+#--------------------------------------
+$(TARGET): $(OBJ)
+	$(LD) $(LDFLAGS) $(OBJ) -o $(TARGET) $(LIBS)
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE) $<
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE) $<
+
+.F90.o:
+	$(FC) $(FFLAGS) -c $(INCLUDE) $<
+
+.f90.o:
+	$(FC) $(FFLAGS) -c $(INCLUDE) $<
+
+.F.o:
+	$(FC) $(FFLAGS) -c $(INCLUDE) $<
+
+.f.o:
+	$(FC) $(FFLAGS) -c $(INCLUDE) $<
+
+check:
+	$(RUN_SHELL) > log.txt
+
+clean:
+	$(RM) $(OBJ) $(TARGET) log.txt
+

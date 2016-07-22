@@ -1,0 +1,34 @@
+polylib {
+    windmill{
+        // 風車のユーザ定義属性
+        //    ここでは回転軸情報を与える
+        //    center_*　　 　　 : 回転軸の原点
+        //    yaw_axis_vec_*    : 風見方向の回転軸のベクトル
+        //    roll_axis_vec_*   : ロータの回転軸のベクトル（初期値）
+        UserAtr{
+            center_x = "0.0"
+            center_y = "0.0"
+            center_z = "0.0"
+            yaw_axis_vec_x    = "0.0"
+            yaw_axis_vec_y    = "0.0"
+            yaw_axis_vec_z    = "1.0"
+            roll_axis_vec_x   = "1.0"
+            roll_axis_vec_y   = "0.0"
+            roll_axis_vec_z   = "0.0"
+        }
+
+        // 形状
+        spinner{
+            filepath="WL3000/WL3000_WLsolid-spinner.stl"
+            movable = "true"
+        }
+        blades{
+            filepath="WL3000/WL3000_WLsolid-blades.stl"
+            movable = "true"
+        }
+        funnel{
+            filepath="WL3000/WL3000_WLsolid-funnel.stl"
+            movable = "true"
+        }
+    }
+} // end of Polylib

@@ -1,0 +1,9 @@
+polylib {
+	plane{
+		filepath="plane_in.stl"
+	}
+	sphere{
+		filepath="sphere_in.stl"
+		movable = "true"
+	}
+} // end of Polylib
