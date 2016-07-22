@@ -1,0 +1,130 @@
+##############################################################################
+#
+# Polylib - Polygon Management Library
+#
+# Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+# All rights reserved.
+# 
+# Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+# All rights reserved.
+#
+##############################################################################
+#
+# sigle版アーカイブ、mpi版アーカイブ作成用Makefile
+#     １回の実行では、sigle版/mpi版のどちらかしか生成出来ません
+#     sigle版/mpi版でコンパイルオプションが違うため、
+#     ディレクトリを分けて buildしてください
+#
+# sigle版アーカイブのみ作成  : make single
+# mpi版アーカイブのみ作成    : make mpi or make
+# includeファイルの依存関係更新 : make depend
+#
+#
+# デバッグ時にはCXXFLAGSに以下を追加のこと
+# -g -DDEBUG
+#
+
+# Copy 'Version.h' to include directory.
+# If you don't have the file, do configure on other environment and copy generated one.
+#
+# $ make -f Makefile_hand
+
+
+###########################################################################
+
+TARGET_DIR	= ../lib
+
+
+#CXXFLAGS += -DSAVE_ID_ASCII -DDEBUG
+#CXXFLAGS += -g -DDEBUG
+
+
+
+#####################################
+# single版マクロ
+#####################################
+SNG_TARGET	= $(TARGET_DIR)/libPOLY.a
+SNG_OBJS	= Polylib.o \
+		  groups/PolygonGroup.o \
+		  groups/VTree.o \
+		  polygons/Triangle.o \
+		  polygons/NptTriangle.o \
+		  file_io/FileIO_func.o \
+		  file_io/PolygonIO.o \
+		  c_lang/CPolylib.o \
+		  f_lang/FPolylib.o
+
+
+#####################################
+# MPI版マクロ
+#####################################
+MPI_TARGET	= $(TARGET_DIR)/libPOLYmpi.a
+MPI_OBJS	= Polylib.o \
+		  Polylib_MPI.o \
+		  groups/PolygonGroup.o \
+		  groups/PolygonGroup_MPI.o \
+		  groups/VTree.o \
+		  polygons/Triangle.o \
+		  polygons/NptTriangle.o \
+		  file_io/FileIO_func.o \
+		  file_io/PolygonIO.o \
+		  c_lang/CPolylib.o \
+		  f_lang/FPolylib.o
+
+
+#####################################
+# ユーティリティ
+#####################################
+UTIL_OBJS	= util/time.o
+
+
+#####################################
+# ヘッダファイル名作成用マクロ
+#####################################
+TMP = $(addsuffix .h, $(basename $(SNG_OBJS) $(MPI_OBJS) $(UTIL_OBJS)))
+HDRS = $(addprefix ../include/, $(TMP))
+
+
+#####################################
+# single版、MPI版作成ルール
+#####################################
+all : depend single mpi
+
+
+#####################################
+# single版作成ルール
+#####################################
+single		: $(SNG_TARGET)
+$(SNG_TARGET)	: $(SNG_OBJS) $(UTIL_OBJS)
+	$(AR) $@ $^
+	$(RANLIB) $(SNG_TARGET)
+
+
+#####################################
+# MPI版作成ルール
+#####################################
+mpi		: $(MPI_TARGET)
+$(MPI_TARGET)	: $(MPI_OBJS) $(UTIL_OBJS)
+	$(AR) $@ $^
+	$(RANLIB) $(MPI_TARGET)
+
+
+#####################################
+# サフィックスルール定義
+#####################################
+%.o: %.cxx
+	$(CXX) $(CXXFLAGS) -I../include $(UDEF_INC_PATH) -o $@ -c $<
+
+
+#####################################
+# ヘッダファイル依存関係
+#####################################
+depend		 : $(HDRS)
+	-@ $(RM) depend.inc
+	-@ for i in $^; do\
+		cpp $(CXXFLAGS) -I../include $(UDEF_INC_PATH) -MM $$i >> depend.inc;\
+	done
+-include depend.inc
+
+clean:
+	$(RM) $(SNG_TARGET) $(MPI_TARGET) $(SNG_OBJS) $(MPI_OBJS) $(UTIL_OBJS)

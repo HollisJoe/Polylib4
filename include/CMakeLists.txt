@@ -1,0 +1,1 @@
+﻿include_directories(c_lang f_lang common file_io groups polygons util)

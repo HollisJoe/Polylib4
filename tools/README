@@ -1,0 +1,56 @@
+/*
+ * Polylib - Polygon Management Library
+ *
+ * Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+ * All rights reserved.
+ * 
+ * Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+ * All rights reserved.
+ *
+ */
+
+このディレクトリには、Polylibのツールが格納されています。
+
+  - stl_to_npt
+      stlファイルよりnpt(長田パッチ）ファイルに変換します。
+      頂点の法線ベクトルを求めて、長田パッチへの変換を行います。
+      頂点の法線ベクトルを求めるためには、頂点回りの隣接する三角形の情報が必要です。
+      隣接する三角形を高速に求めるためにPolylibの検索機能を使用しています。
+      基本は並列実行です。
+
+  - npt_to_stl
+      npt(長田パッチ）ファイルをstlファイルに変換します。
+      逐次実行のみです。
+
+  - npt_to_stl4
+      長田パッチの三角形の各辺の中点を曲面上に補正した点と元の三角形の頂点を
+      相互に接続し、三角形の個数を4倍したポリゴンを生成した上でstlファイルとして出力します。
+      長田パッチの形状を簡易的に確認する時に使用します。
+      逐次実行のみです。
+
+ビルドすることによりインストール先のbin/ディレクトリ配下にプログラムが格納されます。
+
+
+[使用方法]
+
+   mpirun -np 4  stl_to_npt  stl_file  [ edge_degree ]
+
+         stl_file      stlファイル名
+         edge_degree   エッジ判定角度
+                           隣接する相手側の面との角度がこの指定値を超えると、
+                           頂点法線ベクトル決める対象面から除外します。
+                           指定した場合、辺上の位置が面により違った位置に曲面補正する
+                           ことになりますのでnpt_to_stl4のツールで変換して確認すると
+                           微小なスキマが確認出来る場合があります。
+
+                           
+   npt_to_stl  npt_file
+
+         npt_file      長田パッチファイル名
+
+
+   npt_to_stl4  npt_file
+
+         npt_file      長田パッチファイル名
+
+

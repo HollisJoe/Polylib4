@@ -1,0 +1,82 @@
+##############################################################################
+#
+# Polylib - Polygon Management Library
+#
+# Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+# All rights reserved.
+# 
+# Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+# All rights reserved.
+#
+##############################################################################
+#
+#  At first, edit MACRO, then make
+
+# Target
+TARGET      = exampleWindmill
+
+# Command
+RM          = \rm -f
+
+# Directory
+MPI_DIR     =
+PL_DIR      = /usr/local/Polylib
+TP_DIR      = /usr/local/TextParser
+NPT_DIR     = /usr/local/Npatchlib
+
+# Compile Options
+MPI_OPT     = -DMPI_PL
+REAL_OPT    =
+NPT_OPT     = -DUSE_NPATCH_LIB
+OMP_FLAGS   =
+FLAGS_ADD   =
+
+# Libraries
+LIB_MPI=
+LIB_PL=$(PL_DIR)/lib/libPOLYmpi.a
+LIB_TP=$(TP_DIR)/lib/libTPmpi.a
+LIB_NPT=$(NPT_DIR)/lib/libNpatch.a
+LIBS_ADD=
+LIBS=$(LIB_PL) $(LIB_TP) $(LIB_NPT) $(LIB_MPI) $(LIBS_ADD)
+
+# Include
+INCLUDE_MPI=
+INCLUDE_PL=-I$(PL_DIR)/include
+INCLUDE_TP=-I$(TP_DIR)/include
+INCLUDE_NPT=-I$(NPT_DIR)/include
+INCLUDE_ADD=
+INCLUDE=$(INCLUDE_PL) $(INCLUDE_TP) $(INCLUDE_NPT) $(INCLUDE_MPI) $(INCLUDE_ADD)
+
+# Compiler & Compile Options
+CXX=mpicxx
+CXXFLAGS    = -O3 $(MPI_OPT) $(REAL_OPT)  $(NPT_OPT) $(OMP_FLAGS) $(FLAGS_ADD)
+
+# Linker & Linkage Options
+LD=$(CXX)
+LDFLAGS=
+
+# Suffixes
+.SUFFIXES: .o .cxx .cpp
+
+#--------------------------------------
+#  Objects
+OBJ  = \
+	main.o
+
+#--------------------------------------
+all: $(TARGET)
+
+
+#--------------------------------------
+$(TARGET): $(OBJ)
+	$(LD) $(LDFLAGS) $(OBJ) -o $(TARGET) $(LIBS)
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE) $<
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE) $<
+
+clean:
+	$(RM) $(OBJ) $(TARGET)
+

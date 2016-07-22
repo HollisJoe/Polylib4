@@ -1,0 +1,47 @@
+/*
+ * Polylib - Polygon Management Library
+ *
+ * Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+ * All rights reserved.
+ * 
+ * Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+ * All rights reserved.
+ *
+ */
+
+このディレクトリには、Polylibのテストプログラムが格納されています。
+
+    file_io_stl       stlファイルIO テスト
+    file_io_npt       長田パッチファイルIO テスト
+    search_polygon    ポリゴン検索 テスト
+    attribute         ポリゴングループ属性、ポリゴン属性 テスト
+    move_polygon      ポリゴン move/migrate処理 テスト
+    multi_bbox        複数バウンダリ（複数担当領域/ランク） テスト
+    load_reduce_mem   ファイルロード時のメモリ削減 テスト
+    c_interface       C言語インターフェース テスト
+    f_interface       Fortran言語インターフェース テスト
+
+
+Polylibライブラリのビルド時に make check とすることによりテストが可能です。
+テストプログラムを有効とするためには、configure実行時に 
+--enable-test=yes を指定してください。
+c_interfaceのテストを有効とするためには合わせて --enable-test_c=yes を
+f_interfaceのテストを有効とするためには合わせて --enable-test_fortran=yes を
+指定してください。
+
+c_interface/f_interfaceのテストのためには、環境によりライブラリが不足する場合が
+あることが考えられます。その時は、configure実行時に LIBSに不足しているライブラリを
+指定してください。
+
+環境により、以下のテストshellの修正が必要な場合があります。
+    test_run_mpirun.sh
+    test_run_mpiexec.sh
+    test_run_serial.sh
+
+
+バッチ処理でのテストおよびstagein/stageoutには対応していませんので
+Polylibライブラリのビルド時にmake checkでのテストが出来ない場合があります。
+その時は、Makefile_hand 等を使ってプログラムのビルドを行い、
+実行shellは環境に合わせて作成し、動作確認する必要があります。
+
+

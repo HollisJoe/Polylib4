@@ -1,0 +1,19 @@
+polylib {
+    test{
+        sphere{
+            filepath="sphere_in.stl"
+            movable = "true"
+            UserAtr {
+                int_val1  = "11"
+                int_val2  = "22"
+                int_val3  = "33"
+                real_val1 = "111.0"
+                real_val2 = "222.0"
+                real_val3 = "333.0"
+            }
+        }
+    }
+    plane{
+        filepath="plane_in.stl"
+    }
+} // end of Polylib

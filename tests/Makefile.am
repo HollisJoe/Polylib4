@@ -1,0 +1,3 @@
+
+SUBDIRS = @MAKE_TEST_SUB_DIRS@
+

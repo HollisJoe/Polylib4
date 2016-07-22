@@ -1,0 +1,10 @@
+polylib {
+        sphere_1{
+            filepath="sphere_in_txt.stl"
+            movable = "true"
+        }
+        sphere_2{
+            filepath="sphere_in_bin.stl"
+            movable = "true"
+        }
+} // end of Polylib

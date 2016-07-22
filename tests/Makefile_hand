@@ -1,0 +1,106 @@
+##############################################################################
+#
+# Polylib - Polygon Management Library
+#
+# Copyright (c) 2010-2011 VCAD System Research Program, RIKEN. 
+# All rights reserved.
+# 
+# Copyright (c) 2012-2016 Advanced Institute for Computational Science, RIKEN.
+# All rights reserved.
+#
+##############################################################################
+#
+#  At first, edit MACRO, then make
+
+# サブディレクトリ
+SUBDIRS_TEST_CXX     = file_io_stl file_io_npt attribute load_reduce_mem move_polygon multi_bbox search_polygon
+SUBDIRS_TEST_C       = c_interface
+SUBDIRS_TEST_FORTRAN = f_interface
+SUBDIRS = $(SUBDIRS_TEST_CXX) $(SUBDIRS_TEST_C) $(SUBDIRS_TEST_FORTRAN)
+
+# Command
+RM          = \rm -f
+
+# Directory
+MPI_DIR     =
+PL_DIR      = /usr/local/Polylib
+TP_DIR      = /usr/local/TextParser
+NPT_DIR     = /usr/local/Nptlib
+
+# Compile Options
+MPI_OPT     = -DMPI_PL
+REAL_OPT    =
+NPT_OPT     = -DUSE_NPATCH_LIB
+OMP_FLAGS   =
+FLAGS_ADD   =
+#FLAGS_ADD   =-std=c++11   # stoi stod
+
+# Libraries
+LIB_MPI=
+LIB_PL=$(PL_DIR)/lib/libPOLYmpi.a
+LIB_TP=$(TP_DIR)/lib/libTPmpi.a
+LIB_NPT=$(NPT_DIR)/lib/libNpatch.a
+LIBS_ADD=
+LIBS_ADD_C=-lstdc++ -lm -lmpi_cxx
+LIBS_ADD_F=-lstdc++ -lm -lmpi_cxx
+
+LIBS=$(LIB_PL) $(LIB_TP) $(LIB_NPT) $(LIB_MPI) $(LIBS_ADD)
+LIBS_C=$(LIBS) $(LIBS_ADD_C)
+LIBS_F=$(LIBS) $(LIBS_ADD_F)
+
+# Include
+INCLUDE_MPI=
+INCLUDE_PL=-I$(PL_DIR)/include
+INCLUDE_TP=-I$(TP_DIR)/include
+INCLUDE_NPT=-I$(NPT_DIR)/include
+INCLUDE_ADD=-I../include
+INCLUDE_ADD_F=-I$(PL_DIR)/include/f_lang
+INCLUDE=$(INCLUDE_PL) $(INCLUDE_TP) $(INCLUDE_NPT) $(INCLUDE_MPI) $(INCLUDE_ADD)
+INCLUDE_F=$(INCLUDE) $(INCLUDE_ADD_F)
+
+# Compiler & Compile Options
+CXX=mpicxx
+CXXFLAGS  = -O3 $(MPI_OPT) $(REAL_OPT)  $(NPT_OPT) $(OMP_FLAGS) $(FLAGS_ADD)
+CC=mpicc
+CFLAGS    = -O3 $(MPI_OPT) $(REAL_OPT) $(NPT_OPT) $(OMP_FLAGS) $(FLAGS_ADD)
+FC=mpif90
+FFLAGS    = -O3 $(MPI_OPT) $(REAL_OPT) $(REAL_OPT) $(OMP_FLAGS) $(FLAGS_ADD)
+
+# Linker & Linkage Options
+LD_CXX=$(CXX)
+LD_C=$(CC)
+LD_F=$(FC)
+
+LDFLAGS=
+
+# check 時の実行shell
+RUN_SHELL=../test_run_mpirun.sh
+
+#--------------------------------------
+all: cxx_apl  c_apl  f_apl
+
+cxx_apl:
+	@for subdir in $(SUBDIRS_TEST_CXX) ; do \
+		(cd $$subdir && make -f Makefile_hand CXX='$(CXX)' CXXFLAGS='$(CXXFLAGS)' LD='$(LD_CXX)' INCLUDE='$(INCLUDE)' LDFLAGS='$(LDFLAGS)' LIBS='$(LIBS)' ) ;\
+	done
+
+c_apl:
+	@for subdir in $(SUBDIRS_TEST_C) ; do \
+		(cd $$subdir && make -f Makefile_hand CC='$(CC)' CFLAGS='$(CFLAGS)' INCLUDE='$(INCLUDE)' LD='$(LD_C)' LDFLAGS='$(LDFLAGS)' LIBS='$(LIBS_C)' ) ;\
+	done
+
+f_apl:
+	@for subdir in $(SUBDIRS_TEST_FORTRAN) ; do \
+		(cd $$subdir && make -f Makefile_hand FC='$(FC)' FFLAGS='$(FFLAGS)' INCLUDE='$(INCLUDE_F)' LD='$(LD_F)' LDFLAGS='$(LDFLAGS)' LIBS='$(LIBS_F)' ) ;\
+	done
+
+check:
+	@for subdir in $(SUBDIRS) ; do \
+		(cd $$subdir && make -f Makefile_hand check RUN_SHELL='$(RUN_SHELL)' ) ;\
+	done
+
+clean:
+	@for subdir in $(SUBDIRS) ; do \
+		(cd $$subdir && make -f Makefile_hand clean RM='$(RM)' ) ;\
+	done
+

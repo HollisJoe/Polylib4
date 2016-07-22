@@ -1,0 +1,7 @@
+PL:main.cxx:main:L86:#### stl_to_ntp (start) ####
+PL:main.cxx:main:L119: stl_file_name=sphere.stl
+PL:main.cxx:main:L120: fmt_in       =stl_a
+PL:main.cxx:main:L121: npt_file_name=sphere.npt
+PL:main.cxx:main:L122: fmt_out      =npt_a
+PL:main.cxx:main:L141: edge_degree=180
+(rk:0)PL:main.cxx:main:L574:#### stl_to_ntp (end) ####
